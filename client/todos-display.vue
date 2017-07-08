@@ -44,6 +44,16 @@
         name: 'todos-display',
         component: Vue.component('todos-display'),
         props: true,
+        // TODO: Validate also on parameter change. See: https://github.com/vuejs/vue-router/issues/1577
+        beforeEnter: (to, from, next) => {
+          if (!to.params.visibility || ['all', 'active', 'completed'].includes(to.params.visibility)) {
+            next();
+          }
+          else {
+            // TODO: Replace current URL. See: https://github.com/vuejs/vue-router/issues/1578
+            next({name: 'todos-display'});
+          }
+        },
       },
     ]);
   });
@@ -80,6 +90,9 @@
       visibility: {
         type: String,
         default: 'all',
+        validator: (value) => {
+          return ['all', 'active', 'completed'].includes(value);
+        },
       },
     },
 
