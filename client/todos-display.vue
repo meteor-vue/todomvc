@@ -28,9 +28,7 @@
         <li><router-link to="/active" :class="{selected: visibility == 'active'}">Active</router-link></li>
         <li><router-link to="/completed" :class="{selected: visibility == 'completed'}">Completed</router-link></li>
       </ul>
-      <button class="clear-completed" @click="removeCompleted" v-show="todos.length > remaining">
-        Clear completed
-      </button>
+      <button class="clear-completed" @click="removeCompleted" v-show="todos.length > remaining">Clear completed</button>
     </footer>
   </section>
 </template>
