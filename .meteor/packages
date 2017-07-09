@@ -29,3 +29,4 @@ peerlibrary:check-extension
 peerlibrary:subscription-scope
 peerlibrary:subscription-data
 peerlibrary:reactive-publish
+minimongo
