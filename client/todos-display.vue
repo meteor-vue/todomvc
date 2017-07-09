@@ -88,7 +88,7 @@
         if (!this.subHandle) return [];
 
         // TODO: Return cursor.
-        return Collections.Todos.find(this.subHandle.scopeQuery()).fetch();
+        return Collections.Todos.find(this.subHandle.scopeQuery(), {sort: {timestamp: 1}}).fetch();
       },
 
       all() {
