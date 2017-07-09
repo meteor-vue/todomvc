@@ -5,21 +5,21 @@
       <input class="new-todo" autofocus autocomplete="off" placeholder="What needs to be done?" v-model="newTodo" @keyup.enter="addTodo">
     </header>
 
-    <section class="main" v-show="todos.length">
+    <section class="main" v-show="all">
       <input class="toggle-all" type="checkbox" id="toggle-all" v-model="allDone"><label for="toggle-all">Mark all as complete</label>
       <ul class="todo-list">
-        <li class="todo" v-for="todo in filteredTodos" :class="{completed: todo.completed, editing: todo == editedTodo}">
+        <li class="todo" v-for="todo in todos" :class="{completed: todo.completed, editing: todo == editedTodo}">
           <div class="view">
-            <input class="toggle" type="checkbox" v-model="todo.completed">
+            <input class="toggle" type="checkbox" :checked="todo.completed" @change="setCompleted(todo, $event.target.checked)">
             <label @dblclick="editTodo(todo)">{{todo.title}}</label>
             <button class="destroy" @click="removeTodo(todo)"></button>
           </div>
-          <input class="edit" type="text" v-model="todo.title" v-todo-focus="todo == editedTodo" @blur="doneEdit(todo)" @keyup.enter="doneEdit(todo)" @keyup.esc="cancelEdit(todo)">
+          <input class="edit" type="text" :value="todo.title" v-todo-focus="todo == editedTodo" @blur="doneEdit(todo, $event.target.value)" @keyup.enter="doneEdit(todo, $event.target.value)" @keyup.esc="cancelEdit(todo)">
         </li>
       </ul>
     </section>
 
-    <footer class="footer" v-show="todos.length">
+    <footer class="footer" v-show="all">
       <span class="todo-count">
         <strong>{{ remaining }}</strong> {{ pluralize('item', remaining) }} left
       </span>
@@ -28,7 +28,7 @@
         <li><router-link to="/active" :class="{selected: visibility == 'active'}">Active</router-link></li>
         <li><router-link to="/completed" :class="{selected: visibility == 'completed'}">Completed</router-link></li>
       </ul>
-      <button class="clear-completed" @click="removeCompleted" v-show="todos.length > remaining">Clear completed</button>
+      <button class="clear-completed" @click="removeCompleted" v-show="all > remaining">Clear completed</button>
     </footer>
   </section>
 </template>
@@ -58,33 +58,6 @@
     ]);
   });
 
-  var STORAGE_KEY = 'todos-vuejs';
-
-  var todoStorage = {
-    fetch: function () {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    },
-    save: function (todos) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
-    }
-  };
-
-  var filters = {
-    all: function (todos) {
-      return todos;
-    },
-    active: function (todos) {
-      return todos.filter(function (todo) {
-        return !todo.completed;
-      });
-    },
-    completed: function (todos) {
-      return todos.filter(function (todo) {
-        return todo.completed;
-      });
-    }
-  };
-
   export default {
     props: {
       visibility: {
@@ -96,101 +69,115 @@
       },
     },
 
-    // app initial state
-    data: function () {
+    data() {
       return {
-        todos: todoStorage.fetch(),
         newTodo: '',
-        editedTodo: null
-      }
+        editedTodo: null,
+        subHandle: null,
+      };
     },
 
-    // watch todos change for localStorage persistence
-    watch: {
-      todos: {
-        deep: true,
-        handler: todoStorage.save
-      }
+    created() {
+      this.$autorun((computation) => {
+        this.subHandle = this.$subscribe('todos', this.visibility);
+      });
     },
 
-    // computed properties
-    // http://vuejs.org/guide/computed.html
     computed: {
-      filteredTodos: function () {
-        return filters[this.visibility](this.todos);
+      todos() {
+        if (!this.subHandle) return [];
+
+        // TODO: Return cursor.
+        return Collections.Todos.find(this.subHandle.scopeQuery()).fetch();
       },
-      remaining: function () {
-        return filters.active(this.todos).length;
+
+      all() {
+        if (!this.subHandle) return 0;
+
+        return this.subHandle.data('all') || 0;
       },
+
+      remaining() {
+        if (!this.subHandle) return 0;
+
+        return this.subHandle.data('remaining') || 0;
+      },
+
       allDone: {
-        get: function () {
+        get() {
           return this.remaining === 0;
         },
-        set: function (value) {
-          this.todos.forEach(function (todo) {
-            todo.completed = value;
-          });
-        }
-      }
+        set(completed) {
+          // TODO: Handle errors.
+          Methods.Todos.AllCompleted.call({completed});
+        },
+      },
     },
 
-    // methods that implement data logic.
-    // note there's no DOM manipulation here at all.
     methods: {
-
-      pluralize: function (word, count) {
+      pluralize(word, count) {
         return word + (count === 1 ? '' : 's');
       },
 
-      addTodo: function () {
+      addTodo() {
         var value = this.newTodo && this.newTodo.trim();
         if (!value) {
           return;
         }
-        this.todos.push({ title: value, completed: false });
+        // TODO: Handle errors.
+        Methods.Todos.Add.call({todo: {title: value, completed: false}});
         this.newTodo = '';
       },
 
-      removeTodo: function (todo) {
-        var index = this.todos.indexOf(todo);
-        this.todos.splice(index, 1);
+      removeTodo(todo) {
+        // TODO: Handle errors.
+        Methods.Todos.Remove.call({todoId: todo._id});
       },
 
-      editTodo: function (todo) {
+      editTodo(todo) {
         this.beforeEditCache = todo.title;
         this.editedTodo = todo;
       },
 
-      doneEdit: function (todo) {
+      doneEdit(todo, title) {
         if (!this.editedTodo) {
           return;
         }
         this.editedTodo = null;
-        todo.title = todo.title.trim();
-        if (!todo.title) {
+        title = title.trim();
+        if (!title) {
           this.removeTodo(todo);
+        }
+        else {
+          // TODO: Handle errors.
+          Methods.Todos.SetTitle.call({todoId: todo._id, title});
         }
       },
 
-      cancelEdit: function (todo) {
+      cancelEdit(todo) {
         this.editedTodo = null;
         todo.title = this.beforeEditCache;
       },
 
-      removeCompleted: function () {
-        this.todos = filters.active(this.todos);
-      }
+      setCompleted(todo, completed) {
+        // TODO: Handle errors.
+        Methods.Todos.SetCompleted.call({todoId: todo._id, completed});
+      },
+
+      removeCompleted() {
+        // TODO: Handle errors.
+        Methods.Todos.RemoveCompleted.call({});
+      },
     },
 
-    // a custom directive to wait for the DOM to be updated
+    // A custom directive to wait for the DOM to be updated
     // before focusing on the input field.
-    // http://vuejs.org/guide/custom-directive.html
     directives: {
-      'todo-focus': function (el, binding) {
+      'todo-focus'(el, binding) {
         if (binding.value) {
           el.focus();
         }
-      }
-    }
+      },
+    },
   }
 </script>
