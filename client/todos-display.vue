@@ -37,7 +37,7 @@
   import Vue from 'vue';
   import {RouterFactory} from 'meteor/akryum:vue-router2';
 
-  RouterFactory.configure(factory => {
+  RouterFactory.configure((factory) => {
     factory.addRoutes([
       {
         path: '/:visibility?',
@@ -45,7 +45,7 @@
         component: Vue.component('todos-display'),
         props: true,
         // TODO: Validate also on parameter change. See: https://github.com/vuejs/vue-router/issues/1577
-        beforeEnter: (to, from, next) => {
+        beforeEnter(to, from, next) {
           if (!to.params.visibility || ['all', 'active', 'completed'].includes(to.params.visibility)) {
             next();
           }
