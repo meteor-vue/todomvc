@@ -11,7 +11,7 @@ Meteor.startup(() => {
     el: '#app',
     router: router,
     render: (createElement) => {
-      return createElement(Vue.component('app'));
+      return createElement(Vue.component('router-view'));
     }
   });
 });
