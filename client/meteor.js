@@ -156,6 +156,8 @@ Vue.use({
 
 // To allow cursors to be returned from computed fields.
 // See: https://github.com/meteor/meteor/pull/8888
+// Our fork of Vue supports v-for over iterators.
+// See: https://github.com/vuejs/vue/issues/5893
 if (!LocalCollection.Cursor.prototype[Symbol.iterator]) {
   LocalCollection.Cursor.prototype[Symbol.iterator] = function () {
     var self = this;
