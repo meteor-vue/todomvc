@@ -41,8 +41,7 @@
             next();
           }
           else {
-            // TODO: Replace current URL. See: https://github.com/vuejs/vue-router/issues/1578
-            next({name: 'todos-display'});
+            next({name: 'todos-display', replace: true});
           }
         },
       },
