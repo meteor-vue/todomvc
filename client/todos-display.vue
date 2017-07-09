@@ -35,7 +35,9 @@
         name: 'todos-display',
         component: Vue.component('todos-display'),
         props: true,
-        // TODO: Validate also on parameter change. See: https://github.com/vuejs/vue-router/issues/1577
+        // TODO: Validate also on parameter change.
+        //       See: https://github.com/vuejs/vue-router/issues/1577
+        //       See: https://github.com/vuejs/vue-router/issues/1195
         beforeEnter(to, from, next) {
           if (!to.params.visibility || ['all', 'active', 'completed'].includes(to.params.visibility)) {
             next();
