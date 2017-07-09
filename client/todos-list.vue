@@ -1,6 +1,6 @@
 <template>
   <ul class="todo-list">
-    <li class="todo" v-for="todo in todos" :class="{completed: todo.completed, editing: todo == editedTodo}">
+    <li class="todo" v-for="todo in todos" :key="todo._id" :class="{completed: todo.completed, editing: todo == editedTodo}">
       <div class="view">
         <input class="toggle" type="checkbox" :checked="todo.completed" @change="setCompleted(todo, $event.target.checked)">
         <label @dblclick="editTodo(todo)">{{ todo.title }}</label>
