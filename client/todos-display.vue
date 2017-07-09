@@ -33,6 +33,7 @@
       {
         path: '/:visibility?',
         name: 'todos-display',
+        // TODO: How to not hard-code the name of the current component here?
         component: Vue.component('todos-display'),
         props: true,
         // TODO: Validate also on parameter change.
