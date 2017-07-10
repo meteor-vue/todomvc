@@ -101,14 +101,14 @@
         if (!this.subHandle) return 0;
 
         // This is something provided by peerlibrary:subscription-data package.
-        return this.subHandle.data('all') || 0;
+        return this.subHandle.data() && this.subHandle.data().all || 0;
       },
 
       remaining() {
         if (!this.subHandle) return 0;
 
         // This is something provided by peerlibrary:subscription-data package.
-        return this.subHandle.data('remaining') || 0;
+        return this.subHandle.data() && this.subHandle.data().remaining || 0;
       },
 
       // In contrast with ComputedFields, computed properties also allow setters
