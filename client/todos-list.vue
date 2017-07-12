@@ -1,12 +1,12 @@
 <template>
   <ul class="todo-list">
-    <li class="todo" v-for="todo in todos" :key="todo._id" :class="{completed: todo.completed, editing: todo == editedTodo}">
+    <li class="todo" v-for="todo in todos" :key="todo._id" :class="{completed: todo.completed, editing: todo._id == (editedTodo && editedTodo._id)}">
       <div class="view">
         <input class="toggle" type="checkbox" :checked="todo.completed" @change="setCompleted(todo, $event.target.checked)">
         <label @dblclick="editTodo(todo)">{{ todo.title }}</label>
         <button class="destroy" @click="removeTodo(todo)"></button>
       </div>
-      <input class="edit" type="text" :value="todo.title" v-todo-focus="todo == editedTodo" @blur="doneEdit(todo, $event.target.value)" @keyup.enter="doneEdit(todo, $event.target.value)" @keyup.esc="cancelEdit(todo)">
+      <input class="edit" type="text" :value="todo.title" v-todo-focus="todo._id == (editedTodo && editedTodo._id)" @blur="doneEdit(todo, $event.target.value)" @keyup.enter="doneEdit(todo, $event.target.value)" @keyup.esc="cancelEdit(todo)">
     </li>
   </ul>
 </template>
