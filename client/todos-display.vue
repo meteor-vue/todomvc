@@ -92,7 +92,8 @@
         // This defines a reactive dependency on "subHandle" as well.
         if (!this.subHandle) return [];
 
-        // You can return Minimongo cursors directly.
+        // You can return Minimongo cursors directly. Make sure you use ":key" to _id in v-for directive.
+        // In our case, we set ":key" to "todo._id".
         // "scopeQuery" is provided by peerlibrary:subscription-scope package.
         return Collections.Todos.find(this.subHandle.scopeQuery(), {sort: {timestamp: 1}});
       },
