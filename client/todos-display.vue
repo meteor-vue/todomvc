@@ -15,9 +15,9 @@
         <strong>{{ remaining }}</strong> {{ pluralize('item', remaining) }} left
       </span>
       <ul class="filters">
-        <li><router-link to="/all" :class="{selected: visibility == 'all'}">All</router-link></li>
-        <li><router-link to="/active" :class="{selected: visibility == 'active'}">Active</router-link></li>
-        <li><router-link to="/completed" :class="{selected: visibility == 'completed'}">Completed</router-link></li>
+        <li><router-link to="/all" :class="{selected: visibility === 'all'}">All</router-link></li>
+        <li><router-link to="/active" :class="{selected: visibility === 'active'}">Active</router-link></li>
+        <li><router-link to="/completed" :class="{selected: visibility === 'completed'}">Completed</router-link></li>
       </ul>
       <button class="clear-completed" @click="removeCompleted" v-show="all > remaining">Clear completed</button>
     </footer>
