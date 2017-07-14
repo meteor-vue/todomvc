@@ -12,7 +12,7 @@
 
     <footer class="footer" v-show="all">
       <span class="todo-count">
-        <strong>{{ remaining }}</strong> {{ pluralize('item', remaining) }} left
+        <strong>{{remaining}}</strong> {{pluralize('item', remaining)}} left
       </span>
       <ul class="filters">
         <li><router-link to="/all" :class="{selected: visibility == 'all'}">All</router-link></li>
