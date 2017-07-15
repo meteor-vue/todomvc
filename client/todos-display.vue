@@ -28,30 +28,7 @@
   import Vue from 'vue';
   import {RouterFactory} from 'meteor/akryum:vue-router2';
 
-  RouterFactory.configure((factory) => {
-    factory.addRoutes([
-      {
-        path: '/:visibility?',
-        name: 'todos-display',
-        // TODO: How to not hard-code the name of the current component here?
-        component: Vue.component('todos-display'),
-        props: true,
-        // TODO: Validate also on parameter change.
-        //       See: https://github.com/vuejs/vue-router/issues/1577
-        //       See: https://github.com/vuejs/vue-router/issues/1195
-        beforeEnter(to, from, next) {
-          if (!to.params.visibility || ['all', 'active', 'completed'].includes(to.params.visibility)) {
-            next();
-          }
-          else {
-            next({name: 'todos-display', replace: true});
-          }
-        },
-      },
-    ]);
-  });
-
-  export default {
+  const component = {
     // "props" are like arguments to Blaze Components.
     props: {
       visibility: {
@@ -152,5 +129,29 @@
         Methods.Todos.RemoveCompleted.call({});
       },
     },
-  }
+  };
+
+  RouterFactory.configure((factory) => {
+    factory.addRoutes([
+      {
+        component,
+        path: '/:visibility?',
+        name: 'todos-display',
+        props: true,
+        // TODO: Validate also on parameter change.
+        //       See: https://github.com/vuejs/vue-router/issues/1577
+        //       See: https://github.com/vuejs/vue-router/issues/1195
+        beforeEnter(to, from, next) {
+          if (!to.params.visibility || ['all', 'active', 'completed'].includes(to.params.visibility)) {
+            next();
+          }
+          else {
+            next({name: 'todos-display', replace: true});
+          }
+        },
+      },
+    ]);
+  });
+
+  export default component;
 </script>
