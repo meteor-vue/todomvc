@@ -30,3 +30,4 @@ peerlibrary:subscription-scope
 peerlibrary:subscription-data
 peerlibrary:reactive-publish
 minimongo@1.2.1
+vuejs:meteor-integration

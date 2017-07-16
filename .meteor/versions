@@ -86,5 +86,6 @@ tracker@1.1.3
 ui@1.0.13
 underscore@1.0.10
 url@1.1.0
+vuejs:meteor-integration@0.1.0
 webapp@1.3.17
 webapp-hashing@1.0.9
