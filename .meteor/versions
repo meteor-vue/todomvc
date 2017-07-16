@@ -67,7 +67,7 @@ peerlibrary:fiber-utils@0.8.2
 peerlibrary:reactive-mongo@0.1.1
 peerlibrary:reactive-publish@0.5.0
 peerlibrary:server-autorun@0.6.0
-peerlibrary:subscription-data@0.5.1
+peerlibrary:subscription-data@0.6.0
 peerlibrary:subscription-scope@0.3.0
 promise@0.8.9
 random@1.0.10
