@@ -1,7 +1,7 @@
 akryum:npm-check@0.0.3
-akryum:vue-component@0.10.0
+akryum:vue-component@0.10.3
 akryum:vue-component-dev-client@0.2.12
-akryum:vue-component-dev-server@0.0.9
+akryum:vue-component-dev-server@0.0.10
 akryum:vue-router2@0.1.0
 allow-deny@1.0.6
 audit-argument-checks@1.0.7
