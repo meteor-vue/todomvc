@@ -11,7 +11,7 @@
     "meteor-node-stubs": "^0.3.3",
     "todomvc-app-css": "^2.1.2",
     "todomvc-common": "^1.0.5",
-    "vue": "git://github.com/mitar/vue.git#meteor",
+    "vue": "git://github.com/meteor-vue/vue.git",
     "vue-router": "^3.0.1",
     "vue-template-compiler": "2.5.2"
   },
