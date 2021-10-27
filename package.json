@@ -13,7 +13,7 @@
     "todomvc-common": "^1.0.5",
     "vue": "git://github.com/meteor-vue/vue.git#meteor",
     "vue-router": "^3.0.1",
-    "vue-template-compiler": "2.6.10"
+    "vue-template-compiler": "2.6.14"
   },
   "meteor": {
     "vueVersion": 2
